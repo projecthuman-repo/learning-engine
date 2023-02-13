@@ -1,10 +1,6 @@
 from pprint import pprint
 import nltk
-from Questgen import main
-
-
-
-
+from server.models.Questgen import main
 
 if __name__ == "__main__":
     nltk.download('stopwords')

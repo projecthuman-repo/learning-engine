@@ -30,6 +30,7 @@ from PIL import ImageDraw
 from PIL import ImageFont
 from optparse import OptionParser, OptionGroup
 import logging
+import server.models.Crossword.crossword_parser as crossword_parser
 
 ## Thanks Bryan Helmig for his inspiration for this script. He did a lot
 # of work which I could improve in some ways.
@@ -1083,63 +1084,19 @@ class Word(object):
     # ~ raise KeyError
 
 
-if __name__ == "__main__":
-    parser = OptionParser()
-    general_group = OptionGroup(parser, "General Options")
-    general_group.add_option("--nopsyco", help="Do not import psyco", dest="nopsyco", default=True,
-                             action="store_true")
 
-    general_group.add_option("--benchmark", help="Run a benchmark-test", dest="benchmark", default=None,
-                             action="store_true")
-
-    general_group.add_option("--benchmark-settings",
-                             help="Format: 'x,y,z' x=Number of words on each crossword, y=Number of crosswords to generate, z=Each crossword should be the best of ...?",
-                             dest="bsettings", default="100,100,3", action="store")
-
-    general_group.add_option("--stats", help="Print stats", dest="stats", default=None, action="store_true")
-
-    parser.add_option_group(general_group)
-
-
-    crossword_group = OptionGroup(parser, "Crossword Options")
-    crossword_group.add_option("-c", "--cols", help="Number of columns to use (Default: auto)", dest="columns",
-                               default="auto", action="store")
-    crossword_group.add_option("-r", "--rows", help="Number of rows to use (Default: auto)", dest="rows",
-                               default="auto", action="store")
-    crossword_group.add_option("-s", "--solution",
-                               help="The crossword's solution (some colored fields which letters can be used to build a word).\nNote: This will overwrite any solution defined in the input file(s)!! ",
-                               action="store", dest="solution", default=None)
-    crossword_group.add_option("--solved", help="Create a solved crossword", action="store_true", dest="solved",
-                               default=False)
-    crossword_group.add_option("-b", "--bestof", help="Create n crosswords and keep the best", action="store",
-                               dest="bestof", default=3, type="int")
-    parser.add_option_group(crossword_group)
-
-    output_group = OptionGroup(parser, "Output Options")
-    output_group.add_option("--print-clues", help="Print crossword clues to stdout", action="store_true",
-                            dest="print_clues", default=False)
-    output_group.add_option("--print-crossword", help="Print crossword to stdout", action="store_true",
-                            dest="print_crossword", default=False)
-    output_group.add_option("--create-image", help="Create a crossword image", action="store_true", dest="create_image",
-                            default=False)
-    output_group.add_option("-o", "--output",
-                            help="Specify filename (only for --create-image). If no filename is give, the name will be generated from the input file. If you specify multiple input files and an output file, numbers will be appended to the given output-filename",
-                            action="store", dest="output", default=None)
-    parser.add_option_group(output_group)
-
-    image_group = OptionGroup(parser, "Image Options", "These options can be used to specify the image to be generated")
-    image_group.add_option("-p", "--pixels", help="Number of pixels per block for the corssword image", action="store",
-                           dest="ppb", default=32, type="int")
-    parser.add_option_group(image_group)
-    (options, args) = parser.parse_args()
+def run( print_cross):
+    parser = crossword_parser
+    (options, args) = parser.get_option_args()
 
     options.nopsyco = True
     options.benchmark = False
-    options.bsettings = [100,100,3]
-    options.stats=False
+    options.bsettings = [100, 100, 3]
+    options.stats = False
 
-    args = ["cwf-spec.txt"]
-    options.print_crossword = True
+    curdir = os.path.dirname(sys.argv[0])
+    args = ["D:\pycharm_projecs\learning-engine\server\models\Crossword\cwf-spec.txt"]
+    options.print_crossword = print_cross
     options.solved = True
     options.solution = 'Weimar ist schoen'
     options.create_image = False
@@ -1150,14 +1107,14 @@ if __name__ == "__main__":
         run_benchmark_test(words=int(w.strip()), num=int(n.strip()), bestof=int(b.strip()))
         sys.exit(0)
 
-    if args == []:
-        parser.print_help()
-        print("You need to specify an input file")
-        sys.exit(0)
-    if not options.create_image and not options.print_crossword:
-        parser.print_help()
-        print("You need to specify the desired output format")
-        sys.exit(0)
+    # if args == []:
+    #     parser.print_help()
+    #     print("You need to specify an input file")
+    #     sys.exit(0)
+    # if not options.create_image and not options.print_crossword:
+    #     parser.print_help()
+    #     print("You need to specify the desired output format")
+    #     sys.exit(0)
     # ~ if not options.output and options.create_image:
     # ~ parser.print_help()
     # ~ print("You need to specify the desired output file")
@@ -1227,10 +1184,17 @@ if __name__ == "__main__":
             print(formatter.get_crossword_ascii_grid(False, True))
             print
             "Sorry, the print-crossword-formatter is still buggy!\n"
+        if options.print_crossword == False:
+            return formatter.get_crossword_ascii_grid(False, True)
+            print
+            "Sorry, the print-crossword-formatter is still buggy!\n"
         if options.print_clues:
             print
             formatter.get_crossword_ascii_cues()
 
         counter += 1
+
+if __name__ == "__main__":
+    run(print_cross=True)
 
 # python D:\pycharm_projecs\learning-engine\server\models\crossword_2.py cwf-spec.txt -p 32 -o OUTPUT.png --print-crossword --create-image
