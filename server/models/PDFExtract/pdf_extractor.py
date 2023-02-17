@@ -14,7 +14,11 @@ class Extractor:
     def __init__(self, document_path=""):
         # the below line of text is required as we need tesseract.exe installed to use the library.
         # change it to whatever local path you are using
-        tess.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+        tess.pytesseract.tesseract_cmd = r'D:\Program Files\Tesseract-OCR\tesseract.exe'
+        self.tessdata_dir_config = '--tessdata-dir "D:\Program Files\Tesseract-OCR\\tessdata"'
+        # Example config: '--tessdata-dir "C:\\Program Files (x86)\\Tesseract-OCR\\tessdata"'
+        # It's important to include double quotes around the dir path.
+
         self.text = ""
         self.document = None
         self.reader = None
@@ -30,7 +34,7 @@ class Extractor:
             images[i].save('page' + str(i) + '.png', 'PNG')
             # append the extracted text to the rest of the text
             path = "page"+str(i)+".png"
-            self.text = self.text + tess.image_to_string("page"+str(i)+".png") + "\n"
+            self.text = self.text + tess.image_to_string("page"+str(i)+".png",config=self.tessdata_dir_config) + "\n"
             # delete the generated image file.
             os.remove("page" + str(i) + ".png")
 
@@ -78,9 +82,9 @@ class Extractor:
     # will remove stuff from pages with only images (by setting a word limit)
     def filter(self):
         if self.text != "" or None:
-            result = re.split("introduction", self.text, flags=re.IGNORECASE)
+            result = re.split("we are at a historic", self.text, flags=re.IGNORECASE)
             if len(result) > 1:
-                self.text = result[1]
+                self.text = "we are at a historic"+result[1]
             result = re.split("references", self.text, flags=re.IGNORECASE)
             if len(result) > 1:
                 self.text = result[0]
@@ -89,4 +93,7 @@ if __name__ == "__main__":
     extractor = Extractor()
     extractor.ocr_read("D:\pycharm_projecs\learning-engine\Academic_papers\\1-s2.0-S0092867421000118-main.pdf")
     txt = extractor.get_text()
+    txt = txt[0:250]
+    txtb ="Amir Sarah Tendulkar is a former international cricketer from India and a former captain of the Indian national team. He is widely regarded as one of the greatest batsmen in the history of cricket. He is the highest run scorer of all time in International cricket."
+    print(len(txtb))
     print(txt)

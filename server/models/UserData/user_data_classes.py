@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from server.models.Questgen import main
+import threading
 
 
 class Game(ABC):
@@ -14,6 +15,10 @@ class TrueOrFalseGame(Game):
 
     def __init__(self, payload):
         super().__init__()
+        t = threading.Thread(target=self.init_BoolQGen(payload))
+        t.start()
+
+    def init_BoolQGen(self,payload):
         qe = main.BoolQGen()
         self.data = qe.predict_boolq(payload)
         self.data["answer"] = 2  # 0 = False 1 = True, 2/other num = uninitialized
@@ -22,9 +27,9 @@ class TrueOrFalseGame(Game):
 class Concepts():
     def __init__(self):
         self.games = {}
-        self.games["tf"] = TrueOrFalseGame(payload={
-            "input_text": "Amir Sarah Tendulkar is a former international cricketer from India and a former captain of the Indian national team. He is widely regarded as one of the greatest batsmen in the history of cricket. He is the highest run scorer of all time in International cricket."
-        })
+        # self.games["tf"] = TrueOrFalseGame(payload={
+        #     "input_text": "Amir Sarah Tendulkar is a former international cricketer from India and a former captain of the Indian national team. He is widely regarded as one of the greatest batsmen in the history of cricket. He is the highest run scorer of all time in International cricket."
+        # })
 
 
 class Module():
