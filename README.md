@@ -5,6 +5,11 @@
 # Environment Setup 
 Fast API (web framework): https://fastapi.tiangolo.com/tutorial/
 
+Poppler (pdf read): 
+  - https://poppler.freedesktop.org/
+  - (**Windows**) https://stackoverflow.com/questions/18381713/how-to-install-poppler-on-windows
+
+
 Tesseract (pdf read): https://tesseract-ocr.github.io/tessdoc/Installation.html
 
 Questgen AI (ai generation): https://github.com/ramsrigouthamg/Questgen.ai
