@@ -8,14 +8,14 @@ import pytesseract as tess
 import os
 import re
 import concurrent.futures
-import pdf_extractor_constants as pec
+import server.models.PDFExtract.pdf_extractor_constants as pdf_extractor_constants
 
 class Extractor:
     def __init__(self, document_path=""):
         # the below line of text is required as we need tesseract.exe installed to use the library.
         # change it to whatever local path you are using
-        tess.pytesseract.tesseract_cmd = pec.TESSERACT_EXE_PATH
-        self.tessdata_dir_config = pec.TESSERACT_DATA_PATH
+        tess.pytesseract.tesseract_cmd = pdf_extractor_constants.TESSERACT_EXE_PATH
+        self.tessdata_dir_config = pdf_extractor_constants.TESSERACT_DATA_PATH
         # Example config: '--tessdata-dir "C:\\Program Files (x86)\\Tesseract-OCR\\tessdata"'
         # It's important to include double quotes around the dir path.
 
@@ -40,7 +40,7 @@ class Extractor:
 
     # Uses multithreading to save all the images at once
     def ocr_read(self, path):
-        images = convert_from_path(path, poppler_path=pec.POPPLER_PATH)
+        images = convert_from_path(path, poppler_path=pdf_extractor_constants.POPPLER_PATH)
         # Use concurrent.futures instead of for loop
         with concurrent.futures.ThreadPoolExecutor() as ex:
             pgText=ex.map(self.getPage,range(len(images)),images)
@@ -100,7 +100,7 @@ class Extractor:
 
 if __name__ == "__main__":
     extractor = Extractor()
-    extractor.ocr_read(pec.TEMP_PDF_PATH)
+    extractor.ocr_read(pdf_extractor_constants.TEMP_PDF_PATH)
     txt = extractor.get_text()
     txt = txt[0:250]
     txtb ="Amir Sarah Tendulkar is a former international cricketer from India and a former captain of the Indian national team. He is widely regarded as one of the greatest batsmen in the history of cricket. He is the highest run scorer of all time in International cricket."

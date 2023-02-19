@@ -1,47 +1,42 @@
 from abc import ABC, abstractmethod
-from server.models.Questgen import main
 import threading
 
 
 class Game(ABC):
-    def __init__(self):
+    def __init__(self, concept_tag: str, game_id):
         self.data = None
+        self.concept_tag = concept_tag
+        self.game_type = None
+        self.game_id = game_id
 
     def get_data(self):
         return self.data
 
 
 class TrueOrFalseGame(Game):
-
-    def __init__(self, payload):
-        super().__init__()
-        t = threading.Thread(target=self.init_BoolQGen(payload))
-        t.start()
-
-    def init_BoolQGen(self,payload):
-        qe = main.BoolQGen()
-        self.data = qe.predict_boolq(payload)
-        self.data["answer"] = 2  # 0 = False 1 = True, 2/other num = uninitialized
+    def __init__(self, concept_tag: str, game_id: str, data):
+        super().__init__(concept_tag, game_id)
+        self.game_type = "TF"
+        self.data = data
+        # t = threading.Thread(target=self.init_BoolQGen(payload))
+        # t.start()
 
 
-class Concepts():
+class Concept():
     def __init__(self):
-        self.games = {}
-        # self.games["tf"] = TrueOrFalseGame(payload={
-        #     "input_text": "Amir Sarah Tendulkar is a former international cricketer from India and a former captain of the Indian national team. He is widely regarded as one of the greatest batsmen in the history of cricket. He is the highest run scorer of all time in International cricket."
-        # })
-
+        self.games = {"TF": {}, "MCQ": {}, "CW": {}, "WS": {}, "MW": {}, "FIB": {}}
+        self.local_game_id_counter = {"TF": 0, "MCQ": 0, "CW": 0, "WS": 0, "MW": 0, "FIB": 0}
 
 class Module():
     def __init__(self):
         self.concepts = {}
-        self.concepts["concept_1"] = Concepts()
+
+
 
 
 class Course():
     def __init__(self):
         self.modules = {}
-        self.modules["module_1"] = Module()
 
 
 class User():
@@ -49,9 +44,9 @@ class User():
         self.user_id = user_id
 
         self.courses = {}
-        self.courses["course_1"] = Course()
 
         self.stored_pdf = {}
+
 
 if __name__ == '__main__':
     a = User('0')
