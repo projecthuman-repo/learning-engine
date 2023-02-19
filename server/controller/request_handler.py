@@ -13,7 +13,6 @@ from server.models.Questgen import main
 import server.models.UserData.user_data_classes as udc
 import server.models.PDFExtract.pdf_extractor as pdfex
 
-# flask --app hello run
 
 app = FastAPI()
 um = user_manager.UserManager()
