@@ -1,5 +1,4 @@
 """
-
 Extracts the contents of a pdf using either optical charavyer recognition (ocr) or a normal read.
 """
 
@@ -8,6 +7,7 @@ from pypdf import PdfReader
 import pytesseract as tess
 import os
 import re
+import concurrent.futures
 
 
 class Extractor:
@@ -26,17 +26,26 @@ class Extractor:
         if document_path != "":  # if an argument is provided in the constructor
             self.change_document(document_path)
 
-    # used on pdfs with no searchable text
+    # Saves one page individually 
+    def getPage(self,x,images):
+        # Save pages as images of the pdf. only way optical character recognition will work
+        images.save('page' + str(x) + '.png', 'PNG')
+        # gets text from the page
+        path = "page"+str(x)+".png"
+        text=tess.image_to_string("page"+str(x)+".png",config=self.tessdata_dir_config) + "\n"
+        # delete the generated image file.
+        os.remove("page" + str(x) + ".png")
+        return text
+
+
+    # Uses multithreading to save all the images at once
     def ocr_read(self, path):
         images = convert_from_path(path, poppler_path=r"D:\poppler-0.68.0_x86\poppler-0.68.0\bin")
-        for i in range(len(images)):
-            # Save pages as images of the pdf. only way optical character recognition will work
-            images[i].save('page' + str(i) + '.png', 'PNG')
-            # append the extracted text to the rest of the text
-            path = "page"+str(i)+".png"
-            self.text = self.text + tess.image_to_string("page"+str(i)+".png",config=self.tessdata_dir_config) + "\n"
-            # delete the generated image file.
-            os.remove("page" + str(i) + ".png")
+        # Use concurrent.futures instead of for loop
+        with concurrent.futures.ThreadPoolExecutor() as ex:
+            pgText=ex.map(self.getPage,range(len(images)),images)
+        for txt in pgText:
+            self.text+=txt
 
 
     # extracts the text from a document with searchable text
