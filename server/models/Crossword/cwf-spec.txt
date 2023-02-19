@@ -1,0 +1,24 @@
+[options]
+question first = False
+solution = Weimar ist schoen
+
+[questions]
+Thueringen = In welchem Bundesland liegt Weimar?
+Ettersberg = Auf welchem Berg liegt die Gedenkstätte Buchenwald?
+Ilm = Welcher Fluß durchläuft Weimar?
+Becken = Im Westen der Stadt findet sich das Thüringer... .
+Wimares = Wie wurde Weimar im Mittelalter genannt?
+Grafschaft = Von 946 bis 1346 war Weimar eine... .
+Brand = Nach welchem Ereignis wurde Weimar 1424 mit einer großen Mauer umgeben?
+Gold = Nach welchem Edelmetall wurde die Epoche um die Weimarer Klassik benannt?
+Wieland = Wer gehört noch zum "Viergestirn" der Weimarer Klassik: Goethe, Schiller, Herder und .... ?
+Herzogin = Welches Amt hatte die Namensgeberin der Anna-Amalia-Bibliothek inne?
+Wagner = Welcher bekannte Komponist hielt sich in Weimar auf?
+Lesegesellschaften = Wodurch wollte man nach 1850 auch "einfachen" Menschen Kunst und Kultur nahe bringen?
+Bauhaus = Welche Weimarer Institution revolutionierte Architektur und Design in Deutschland und der Welt nachhaltig?
+Jena = Von Erfurt und ... liegt Weimar jeweils ca. 20 Kilometer entfernt.
+Dessau = Wohin zog das Bauhaus 1925?
+Hitlerjugend = Welche NSDAP-Organisation wurde in Weimar gegründet?
+Speziallager = Was wurde aus dem KZ Buchenwald in der SBZ?
+Kulturstadt = 1999 wurde Weimar zur "... Europas" erklärt.
+Weltkulturerbe = Gleich mehrere Gebäude in Weimar gehören zum UNESCO-... .
