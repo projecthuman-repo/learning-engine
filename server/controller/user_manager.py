@@ -31,3 +31,14 @@ class UserManager:
         self.user_dict[user_id].courses[course_title].modules[module_title] = udc.Module()
     def create_course(self,user_id:str, course_title:str):
         self.user_dict[user_id].courses[course_title] = udc.Course()
+
+    def create_cw_game(self, user_id, course_title, module_title, concept_title, data):
+        local_game_id = self.user_dict[user_id].courses[course_title].modules[module_title]. \
+            concepts[concept_title].local_game_id_counter["CW"]
+        self.user_dict[user_id].courses[course_title].modules[module_title]. \
+            concepts[concept_title].local_game_id_counter["CW"] += 1
+
+        game = udc.CrosswordGame(concept_title, local_game_id, data)
+
+        self.user_dict[user_id].courses[course_title].modules[module_title]. \
+            concepts[concept_title].games["CW"][local_game_id] = game
