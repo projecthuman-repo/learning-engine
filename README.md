@@ -9,8 +9,9 @@ Poppler (pdf read):
   - https://poppler.freedesktop.org/
   - (**Windows**) https://stackoverflow.com/questions/18381713/how-to-install-poppler-on-windows
 
-
 Tesseract (pdf read): https://tesseract-ocr.github.io/tessdoc/Installation.html
+
+Academic Paper PDF files: phc google drive or use your own pdf papers.
 
 Questgen AI (ai generation): https://github.com/ramsrigouthamg/Questgen.ai
 
