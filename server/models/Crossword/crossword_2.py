@@ -31,6 +31,8 @@ from PIL import ImageFont
 from optparse import OptionParser, OptionGroup
 import logging
 import server.models.Crossword.crossword_parser as crossword_parser
+from server.server_constants import CROSSWORD_TXT_PATH
+
 
 ## Thanks Bryan Helmig for his inspiration for this script. He did a lot
 # of work which I could improve in some ways.
@@ -39,7 +41,7 @@ import server.models.Crossword.crossword_parser as crossword_parser
 
 ## With Bryan's permission this code is released under GPLv3
 
-CROSSWORD_TXT_PATH = "D:\pycharm_projecs\learning-engine-phc\server\models\Crossword\cwf-spec.txt"
+
 
 ## Define some Exceptions
 class SolutionError(Exception):

@@ -11,7 +11,7 @@ from server.controller.user_manager import UserManager
 from server.models.Questgen import main
 import server.models.UserData.user_data_classes as udc
 from server.models.PDFExtract.pdf_extractor import Extractor
-import server.models.PDFExtract.pdf_extractor_constants as pdf_extractor_constants
+from server.server_constants import *
 
 
 
@@ -73,7 +73,7 @@ async def initiate_user(user_id: str):
 
 def create_cw_game(user_id, course_title, module_title, concept_title):
     data = crossword_methods.run(print_cross=True,
-                          crossword_txt_path=crossword_methods.CROSSWORD_TXT_PATH)
+                          crossword_txt_path=CROSSWORD_TXT_PATH)
     um.create_cw_game(user_id,
                       course_title=course_title,
                       module_title=module_title,
@@ -118,7 +118,7 @@ def read_pdf(path:str):
     return payload
 @app.post("/user/")  # http://127.0.0.1:8000/user/?user_id=0
 async def convert_pdf(user_id: str, convert_pdf: bool = True):
-    extractor.ocr_read(pdf_extractor_constants.TEMP_PDF_PATH)
+    extractor.ocr_read(TEMP_PDF_PATH)
     txt = extractor.get_text()
     txt = txt[0:250]
     payload = {"input_text": txt}
