@@ -36,19 +36,6 @@ def read_root():
 def print_crossword_grid():
     a = crossword_methods.run(print_cross=False)
     return {a}
-    # return "1"
-
-
-# @app.get("/true_or_false")
-# def true_or_false():
-#     #nltk.download('stopwords')
-#     payload = {
-#         "input_text": "Amir Sarah Tendulkar is a former international cricketer from India and a former captain of the Indian national team. He is widely regarded as one of the greatest batsmen in the history of cricket. He is the highest run scorer of all time in International cricket."
-#     }
-#     qe = main.BoolQGen()
-#     output = qe.predict_boolq(payload)
-#     return output
-#     #return "1"
 
 fake_items_db = [{"item_name": "Foo"}, {"item_name": "Bar"}, {"item_name": "Baz"}]
 
@@ -68,20 +55,41 @@ async def initiate_user(user_id: str):
                       module_title="module_1",
                       concept_title="concept_1")
 
-    print("reading_pdf")
-    txt = read_pdf(pdf_extractor_constants.TEMP_PDF_PATH)
-    print("pdf_read")
-    print("\n")
-    print(txt)
-    print("\n")
-    print("creating_tf_q")
-    create_tf_game(txt, user_id,
-                      course_title="course_1",
-                      module_title="module_1",
-                      concept_title="concept_1")
-    print("tfq_created")
+    # print("reading_pdf")
+    # txt = read_pdf(pdf_extractor_constants.TEMP_PDF_PATH)
+    # print("pdf_read")
+    # print("\n")
+    # print(txt)
+    # print("\n")
+    # print("creating_tf_q")
+    # create_tf_game(txt, user_id,
+    #                   course_title="course_1",
+    #                   module_title="module_1",
+    #                   concept_title="concept_1")
+    # print("tfq_created")
 
     return "user" + str(user_id) + "created" + "txt"
+
+
+def create_cw_game(user_id, course_title, module_title, concept_title):
+    data = crossword_methods.run(print_cross=True,
+                          crossword_txt_path=crossword_methods.CROSSWORD_TXT_PATH)
+    um.create_cw_game(user_id,
+                      course_title=course_title,
+                      module_title=module_title,
+                      concept_title=concept_title,
+                      data=data)
+
+
+@app.post("/user/initiate_cw_game")  # http://127.0.0.1:8000/user/initiate_cw_game/?user_id=0&cw=1
+async def initiate_cw_game(user_id: str, cw: str):
+    if cw == "1":
+        print("creating_cw_game")
+        create_cw_game(user_id,
+                      course_title="course_1",
+                      module_title="module_1",
+                      concept_title="concept_1"),
+
 def create_tf_game(txt, user_id,
                   course_title="course_1",
                   module_title="module_1",

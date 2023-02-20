@@ -39,6 +39,7 @@ import server.models.Crossword.crossword_parser as crossword_parser
 
 ## With Bryan's permission this code is released under GPLv3
 
+CROSSWORD_TXT_PATH = "D:\pycharm_projecs\learning-engine-phc\server\models\Crossword\cwf-spec.txt"
 
 ## Define some Exceptions
 class SolutionError(Exception):
@@ -1085,7 +1086,9 @@ class Word(object):
 
 
 
-def run( print_cross):
+def run( print_cross, crossword_txt_path):
+    data = {}
+
     parser = crossword_parser
     (options, args) = parser.get_option_args()
 
@@ -1095,7 +1098,7 @@ def run( print_cross):
     options.stats = False
 
     curdir = os.path.dirname(sys.argv[0])
-    args = ["D:\pycharm_projecs\learning-engine\server\models\Crossword\cwf-spec.txt"]
+    args = [crossword_txt_path]
     options.print_crossword = print_cross
     options.solved = True
     options.solution = 'Weimar ist schoen'
@@ -1161,6 +1164,11 @@ def run( print_cross):
             solution = None
 
         wordlist = parser.get_questions()
+        word_dict = {}
+        for pair in wordlist:
+            word_dict[pair[0]] = pair[1]
+        print(word_dict)
+        data["word_dict"] = word_dict
         cwd = CrossWord(options.columns, options.rows, " ", 5000, wordlist)
         score = cwd.compute_crossword(best_of=options.bestof, force_solved=False)
 
@@ -1177,24 +1185,29 @@ def run( print_cross):
         formatter = CrossWordFormatter(cwd, ppb=options.ppb, solution=solution)
 
         if options.create_image:
+            print("1")
             formatter.get_crossword_image_grid(output=output)
             if options.solved:
                 formatter.get_crossword_image_grid(output=output.replace(".png", "_solved.png"), solved=True)
         if options.print_crossword:
+            data["grid"] = formatter.get_crossword_ascii_grid(False, True)
+            print("2")
             print(formatter.get_crossword_ascii_grid(False, True))
             print
             "Sorry, the print-crossword-formatter is still buggy!\n"
         if options.print_crossword == False:
+            print("3")
             return formatter.get_crossword_ascii_grid(False, True)
             print
             "Sorry, the print-crossword-formatter is still buggy!\n"
         if options.print_clues:
+            print("4")
             print
             formatter.get_crossword_ascii_cues()
 
         counter += 1
-
+    return data
 if __name__ == "__main__":
-    run(print_cross=True)
+    data = run(print_cross=True,crossword_txt_path=CROSSWORD_TXT_PATH)
 
 # python D:\pycharm_projecs\learning-engine\server\models\crossword_2.py cwf-spec.txt -p 32 -o OUTPUT.png --print-crossword --create-image

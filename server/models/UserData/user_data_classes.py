@@ -21,6 +21,12 @@ class TrueOrFalseGame(Game):
         # t = threading.Thread(target=self.init_BoolQGen(payload))
         # t.start()
 
+class CrosswordGame(Game):
+    def __init__(self, concept_tag: str, game_id: str, data):
+        super().__init__(concept_tag, game_id)
+        self.game_type = "CW"
+        self.data = data
+
 
 class Concept():
     def __init__(self):
