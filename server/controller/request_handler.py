@@ -129,7 +129,7 @@ async def get_user(user_id: str):
     return um.user_dict[user_id]
 
 
-# uvicorn server.controller.request_handler:app --reload
+# uvicorn server.controller.request_handler:LeafAI --reload
 if __name__ == '__main__':
     print('[main]: starting...')
-    uvicorn.run("server.controller.request_handler:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("server.controller.request_handler:LeafAI", host="127.0.0.1", port=8000, reload=True)
