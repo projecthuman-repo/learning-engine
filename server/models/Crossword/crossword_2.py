@@ -614,7 +614,7 @@ def multiple_crosswords(cols, rows, empty="-", maxloops=2000, wordlist=[], num=1
 class CrossWord(object):
     """The crossword objects represents a crossword"""
 
-    def __init__(self, cols, rows, empty='_', maxloops=2000, wordlist=[], reduce=None):
+    def __init__(self, cols, rows, empty='_', maxloops=2000, wordlist=[], word_dict={}, reduce=None):
         """Initialize the crossword. Notice: This will also be used to create
         a copy of the original crossword. For this reason there is some
         wordlist-"magic" in here."""
@@ -659,6 +659,8 @@ class CrossWord(object):
         self.placed_words = []
         self.counter = 0
         self._setup_grid_and_letters()
+        self.data = {}
+        self.data["word_dict"] = word_dict
 
         self.score = -1
 
@@ -705,7 +707,7 @@ class CrossWord(object):
         """
 
         copy = CrossWord(self.cols, self.rows, self.empty, self.maxloops, [(w.word, w.clue) for w in self.wordlist],
-                         )
+                         self.data["word_dict"])
 
         best_score = 0
         count = 0
@@ -853,6 +855,15 @@ class CrossWord(object):
 
             score += fit_score
             self._write_word(col, row, vertical, word)
+            if word.vertical:
+                clue = word.clue
+                vertical = 1
+                self.data["word_dict"][word.word.upper()] = {"clue": clue, "vertical":vertical}
+            else:
+                clue = word.clue
+                vertical = 0
+                self.data["word_dict"][word.word.upper()] = {"clue": clue, "vertical":vertical}
+
 
         if count >= self.maxloops:
             raise MaxLoopError("Maxloops reached - canceling (Counter: %i, Word: %s)" % (count, word.word))
@@ -1074,6 +1085,8 @@ class Word(object):
         self.solution = False
         self.solution_char = None
 
+
+
     def __len__(self):
         print("Please use len(word.word) to ask for the length of the word - this is much faster")
         return len(self.word)
@@ -1103,7 +1116,7 @@ def run( print_cross, crossword_txt_path):
     args = [crossword_txt_path]
     options.print_crossword = print_cross
     options.solved = True
-    options.solution = 'Weimar ist schoen'
+    options.solution = 'PIC MUSE TMDPH PIC MUSE TMDPH'
     options.create_image = False
 
     if options.benchmark:
@@ -1167,11 +1180,12 @@ def run( print_cross, crossword_txt_path):
 
         wordlist = parser.get_questions()
         word_dict = {}
+        # word dict
         for pair in wordlist:
             word_dict[pair[0]] = pair[1]
         print(word_dict)
         data["word_dict"] = word_dict
-        cwd = CrossWord(options.columns, options.rows, " ", 5000, wordlist)
+        cwd = CrossWord(options.columns, options.rows, " ", 5000, wordlist,data["word_dict"])
         score = cwd.compute_crossword(best_of=options.bestof, force_solved=False)
 
         tmplist = [w.word.lower() for w in cwd.placed_words]
@@ -1193,7 +1207,9 @@ def run( print_cross, crossword_txt_path):
                 formatter.get_crossword_image_grid(output=output.replace(".png", "_solved.png"), solved=True)
         if options.print_crossword:
             data["grid"] = formatter.get_crossword_ascii_grid(False, True)
-            print("2")
+            print("final func 2")
+            print(cwd.data["word_dict"])
+            data["word_dict"] = cwd.data["word_dict"]
             print(formatter.get_crossword_ascii_grid(False, True))
             print
             "Sorry, the print-crossword-formatter is still buggy!\n"

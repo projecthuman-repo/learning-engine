@@ -71,6 +71,32 @@ async def initiate_user(user_id: str):
     return "user" + str(user_id) + "created" + "txt"
 
 
+
+
+def create_tf_game(txt, user_id,
+                  course_title="course_1",
+                  module_title="module_1",
+                  concept_title="concept_1"):
+    data = tf_gen.predict_boolq(txt)
+
+    for bool_q_count in range(len(data["Boolean Questions"])):
+        reformated_data = {"text": data["Text"],
+                           "question": data["Boolean Questions"][bool_q_count],
+                           "answer": None}
+        um.create_tf_game(user_id,
+                          course_title=course_title,
+                          module_title=module_title,
+                          concept_title=concept_title,
+                          data=reformated_data)
+
+def create_mc_game(txt, user_id,
+                  course_title="course_1",
+                  module_title="module_1",
+                  concept_title="concept_1"):
+    # multiple choice (LeafAI)
+    a = 1
+
+
 def create_cw_game(user_id, course_title, module_title, concept_title):
     data = crossword_methods.run(print_cross=True,
                           crossword_txt_path=CROSSWORD_TXT_PATH)
@@ -90,21 +116,31 @@ async def initiate_cw_game(user_id: str, cw: str):
                       module_title="module_1",
                       concept_title="concept_1"),
 
-def create_tf_game(txt, user_id,
-                  course_title="course_1",
-                  module_title="module_1",
-                  concept_title="concept_1"):
-    data = tf_gen.predict_boolq(txt)
+def create_ws_game(txt, user_id,
+                   course_title="course_1",
+                   module_title="module_1",
+                   concept_title="concept_1"):
+    # word search game (WordSearch)
+    a = 1
+def create_fitb_game(txt, user_id,
+                   course_title="course_1",
+                   module_title="module_1",
+                   concept_title="concept_1"):
+    # fill in the blank (LeafAI)
+    a = 1
 
-    for bool_q_count in range(len(data["Boolean Questions"])):
-        reformated_data = {"text": data["Text"],
-                           "question": data["Boolean Questions"][bool_q_count],
-                           "answer": None}
-        um.create_tf_game(user_id,
-                          course_title=course_title,
-                          module_title=module_title,
-                          concept_title=concept_title,
-                          data=reformated_data)
+def create_dm_game(txt, user_id,
+                   course_title="course_1",
+                   module_title="module_1",
+                   concept_title="concept_1"):
+    # 1. generate game data
+    data = {"word":"def", "a":"the first letter in alphabet", "b":"the second letter in alphabet"}
+    # definition match
+    um.create_dm_game(user_id,
+                   course_title="course_1",
+                   module_title="module_1",
+                   concept_title="concept_1",
+                   data = data),
 
 def create_user(user_id):
     print("creating user")
@@ -126,10 +162,44 @@ async def convert_pdf(user_id: str, convert_pdf: bool = True):
 
 @app.get("/user/")  # http://127.0.0.1:8000/user/?user_id=0&create=False
 async def get_user(user_id: str):
+    if user_id == "dummy": # some inappropriate usage just for simpler testing
+        create_dummy_user()
     return um.user_dict[user_id]
 
 
+
+def create_dummy_user():
+    user_id = "dummy"
+    course_title = "course_1"
+    module_title = "module_1"
+    concept_title = "concept_1"
+
+    leaf_context = '''The koala or, inaccurately, koala bear[a] (Phascolarctos cinereus), is an arboreal herbivorous marsupial native to Australia. It is the only extant representative of the family Phascolarctidae and its closest living relatives are the wombats, which are members of the family Vombatidae. The koala is found in coastal areas of the mainland's eastern and southern regions, inhabiting Queensland, New South Wales, Victoria, and South Australia. It is easily recognisable by its stout, tailless body and large head with round, fluffy ears and large, spoon-shaped nose. The koala has a body length of 60–85 cm (24–33 in) and weighs 4–15 kg (9–33 lb). Fur colour ranges from silver grey to chocolate brown. Koalas from the northern populations are typically smaller and lighter in colour than their counterparts further south. These populations possibly are separate subspecies, but this is disputed.'''
+
+
+    create_user(user_id)
+    um.create_course(user_id, course_title=course_title)
+    um.create_module(user_id, course_title=course_title, module_title=module_title)
+    um.create_concept(user_id,
+                      course_title=course_title,
+                      module_title=module_title,
+                      concept_title=concept_title)
+    create_cw_game(user_id=user_id,
+                      course_title=course_title,
+                      module_title=module_title,
+                      concept_title=concept_title)
+    create_dm_game(txt="unused",user_id=user_id,
+                   course_title=course_title,
+                   module_title=module_title,
+                   concept_title=concept_title)
+    create_fitb_game(txt="unused", user_id=user_id,
+                   course_title=course_title,
+                   module_title=module_title,
+                   concept_title=concept_title)
 # uvicorn server.controller.request_handler:app --reload
 if __name__ == '__main__':
     print('[main]: starting...')
-    uvicorn.run("server.controller.request_handler:app", host="127.0.0.1", port=8000, reload=True)
+
+    uvicorn.run("server.controller.request_handler:app", host="127.0.0.1", port=8000, reload=False)
+    # reload=True means if you edit request_handler.py while the server is running, it will auto-rerun the server
+    create_dummy_user()

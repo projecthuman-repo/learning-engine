@@ -7,13 +7,14 @@ class UserManager:
 
     def create_tf_game(self, user_id: str, course_title: str, module_title: str,
                        concept_title: str, data):
+        # 1. initialize game id based on current counter
         local_game_id = self.user_dict[user_id].courses[course_title].modules[module_title].\
             concepts[concept_title].local_game_id_counter["TF"]
         self.user_dict[user_id].courses[course_title].modules[module_title]. \
             concepts[concept_title].local_game_id_counter["TF"] += 1
-
+        # 2. create game
         game = udc.TrueOrFalseGame(concept_title, local_game_id, data)
-
+        # 3. append game
         self.user_dict[user_id].courses[course_title].modules[module_title].\
             concepts[concept_title].games["TF"][local_game_id] = game
     def update_tf_game(self,user_id: str, course_title: str, module_title: str,
@@ -33,12 +34,26 @@ class UserManager:
         self.user_dict[user_id].courses[course_title] = udc.Course()
 
     def create_cw_game(self, user_id, course_title, module_title, concept_title, data):
+        # 1. initialize game id based on current counter
         local_game_id = self.user_dict[user_id].courses[course_title].modules[module_title]. \
             concepts[concept_title].local_game_id_counter["CW"]
         self.user_dict[user_id].courses[course_title].modules[module_title]. \
             concepts[concept_title].local_game_id_counter["CW"] += 1
-
+        # 2. create game
         game = udc.CrosswordGame(concept_title, local_game_id, data)
-
+        # 3. append game
         self.user_dict[user_id].courses[course_title].modules[module_title]. \
             concepts[concept_title].games["CW"][local_game_id] = game
+
+    def create_dm_game(self, user_id, course_title, module_title, concept_title, data):
+
+        # 1. initialize game id based on current counter
+        local_game_id = self.user_dict[user_id].courses[course_title].modules[module_title]. \
+            concepts[concept_title].local_game_id_counter["DM"]
+        self.user_dict[user_id].courses[course_title].modules[module_title]. \
+            concepts[concept_title].local_game_id_counter["DM"] += 1
+        # 2. create game
+        game = udc.DefinitionMatchGame(concept_title, local_game_id, data)
+        # 3. append game
+        self.user_dict[user_id].courses[course_title].modules[module_title]. \
+            concepts[concept_title].games["DM"][local_game_id] = game

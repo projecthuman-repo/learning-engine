@@ -12,7 +12,6 @@ class Game(ABC):
     def get_data(self):
         return self.data
 
-
 class TrueOrFalseGame(Game):
     def __init__(self, concept_tag: str, game_id: str, data):
         super().__init__(concept_tag, game_id)
@@ -20,6 +19,23 @@ class TrueOrFalseGame(Game):
         self.data = data
         # t = threading.Thread(target=self.init_BoolQGen(payload))
         # t.start()
+class MultipleChoiceGame(Game):
+    def __init__(self, concept_tag: str, game_id: str, data):
+        super().__init__(concept_tag, game_id)
+        self.game_type = "MC"
+        self.data = data
+
+class WordSearchGame(Game):
+    def __init__(self, concept_tag: str, game_id: str, data):
+        super().__init__(concept_tag, game_id)
+        self.game_type = "WS"
+        self.data = data
+
+class FillInTheBlankGame(Game):
+    def __init__(self, concept_tag: str, game_id: str, data):
+        super().__init__(concept_tag, game_id)
+        self.game_type = "FITB"
+        self.data = data
 
 class CrosswordGame(Game):
     def __init__(self, concept_tag: str, game_id: str, data):
@@ -27,11 +43,17 @@ class CrosswordGame(Game):
         self.game_type = "CW"
         self.data = data
 
+class DefinitionMatchGame(Game):
+    def __init__(self, concept_tag: str, game_id: str, data):
+        super().__init__(concept_tag, game_id)
+        self.game_type = "DM"
+        self.data = data
+
 
 class Concept():
     def __init__(self):
-        self.games = {"TF": {}, "MCQ": {}, "CW": {}, "WS": {}, "MW": {}, "FIB": {}}
-        self.local_game_id_counter = {"TF": 0, "MCQ": 0, "CW": 0, "WS": 0, "MW": 0, "FIB": 0}
+        self.games = {"TF": {}, "MC": {}, "CW": {}, "WS": {}, "DM": {}, "FITB": {}}
+        self.local_game_id_counter = {"TF": 0, "MC": 0, "CW": 0, "WS": 0, "DM": 0, "FITB": 0}
 
 class Module():
     def __init__(self):
