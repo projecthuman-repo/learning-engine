@@ -9,15 +9,19 @@ from server.models.Crossword import crossword_2 as crossword_methods
 from pprint import pprint
 from server.controller.user_manager import UserManager
 from server.models.Questgen import main
+from server.models.LeafAI.mcq_generation import MCQGenerator
+from server.models.WordSearch.WordSearch import WordSearch
 import server.models.UserData.user_data_classes as udc
 from server.models.PDFExtract.pdf_extractor import Extractor
 from server.server_constants import *
+
 
 
 app = FastAPI()
 um = UserManager()
 extractor = Extractor()
 tf_gen = main.BoolQGen()
+mc_gen = MCQGenerator(False)
 RESPONSE = ""
 
 
@@ -93,17 +97,23 @@ def create_mc_game(txt, user_id,
                   module_title="module_1",
                   concept_title="concept_1"):
     # multiple choice (LeafAI)
-    a = 1
+    question = mc_gen.generate_mcq_questions(txt, 8)
+    for index in range(len(question)):
+        um.create_game(user_id,
+                       course_title=course_title,
+                       module_title=module_title,
+                       concept_title=concept_title,
+                       data=question[index], game_type="CW")
 
 
 def create_cw_game(user_id, course_title, module_title, concept_title):
     data = crossword_methods.run(print_cross=True,
                           crossword_txt_path=CROSSWORD_TXT_PATH)
-    um.create_cw_game(user_id,
+    um.create_game(user_id,
                       course_title=course_title,
                       module_title=module_title,
                       concept_title=concept_title,
-                      data=data)
+                      data=data, game_type="CW")
 
 
 @app.post("/user/initiate_cw_game")  # http://127.0.0.1:8000/user/initiate_cw_game/?user_id=0&cw=1
@@ -120,13 +130,48 @@ def create_ws_game(txt, user_id,
                    module_title="module_1",
                    concept_title="concept_1"):
     # word search game (WordSearch)
-    a = 1
+
+    words = txt
+
+    words_lst = words.split(',')
+    grid_len = len(max(words_lst, key=len)) + 2
+    w = WordSearch(words, grid_len, grid_len)
+    w.findWords(words.split(','))
+    data = {"grid": w.grid, "positions": w.wordPosition}
+    um.create_game(user_id,
+                      course_title=course_title,
+                      module_title=module_title,
+                      concept_title=concept_title,
+                      data=data, game_type="WS")
 def create_fitb_game(txt, user_id,
                    course_title="course_1",
                    module_title="module_1",
                    concept_title="concept_1"):
     # fill in the blank (LeafAI)
-    a = 1
+    context = txt
+    # Obtain the answers from the generation of the multiple choice questions.
+    questions = mc_gen.generate_mcq_questions(context, 8)
+    # Obtain the sentence in which these answers appear in order to create the fill-in-the-blank.
+    context_splits = mc_gen._split_context_according_to_desired_count(context, 8)
+    # Find the index at which the answer starts in the sentence in order to help with the fill in the blank generation (i.e removing the answer)
+    # from the sentence.
+    start_idx = []
+    i = 0
+    data = {}
+    # This algorithm cannot find the start of the answer "60-85 cm" for the sentence "The koala has a body length of 60–85 cm (24–33 in) and weighs 4–15 kg (9–33 lb)."
+    # However, it should not be an issue if the pre-processing of the texts replace the special character "–" with "-". This could be a re-occuring issue.
+    for sentence, answer in zip(context_splits, questions):
+        data["sentence"] = sentence
+        data["keyword"] = answer.answerText
+        start_idx.append(sentence.lower().find(answer.answerText.lower()))
+        data["start_index"] = start_idx[i]
+        um.create_game(user_id,
+                       course_title=course_title,
+                       module_title=module_title,
+                       concept_title=concept_title,
+                       data=data, game_type="WS")
+        i = i + 1
+
 
 def create_dm_game(txt, user_id,
                    course_title="course_1",
