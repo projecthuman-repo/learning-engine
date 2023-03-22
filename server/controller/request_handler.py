@@ -157,14 +157,13 @@ def create_fitb_game(txt, user_id,
     # from the sentence.
     start_idx = []
     i = 0
-    data = {}
     # This algorithm cannot find the start of the answer "60-85 cm" for the sentence "The koala has a body length of 60–85 cm (24–33 in) and weighs 4–15 kg (9–33 lb)."
     # However, it should not be an issue if the pre-processing of the texts replace the special character "–" with "-". This could be a re-occuring issue.
     for sentence, answer in zip(context_splits, questions):
-        data["sentence"] = sentence
-        data["keyword"] = answer.answerText
+
         start_idx.append(sentence.lower().find(answer.answerText.lower()))
-        data["start_index"] = start_idx[i]
+
+        data = {"sentence": sentence, "keyword": answer.answerText, "start_index": start_idx[i]}
         um.create_game(user_id,
                        course_title=course_title,
                        module_title=module_title,
