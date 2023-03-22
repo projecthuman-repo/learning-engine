@@ -1116,7 +1116,7 @@ def run( print_cross, crossword_txt_path):
     args = [crossword_txt_path]
     options.print_crossword = print_cross
     options.solved = True
-    options.solution = 'PIC MUSE TMDPH PIC MUSE TMDPH'
+    options.solution = 'PIC MUSE TMDPH'
     options.create_image = False
 
     if options.benchmark:

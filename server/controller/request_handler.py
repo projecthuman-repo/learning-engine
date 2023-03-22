@@ -86,11 +86,11 @@ def create_tf_game(txt, user_id,
         reformated_data = {"text": data["Text"],
                            "question": data["Boolean Questions"][bool_q_count],
                            "answer": None}
-        um.create_tf_game(user_id,
+        um.create_game(user_id,
                           course_title=course_title,
                           module_title=module_title,
                           concept_title=concept_title,
-                          data=reformated_data)
+                          data=reformated_data,game_type="TF")
 
 def create_mc_game(txt, user_id,
                   course_title="course_1",
@@ -103,7 +103,7 @@ def create_mc_game(txt, user_id,
                        course_title=course_title,
                        module_title=module_title,
                        concept_title=concept_title,
-                       data=question[index], game_type="CW")
+                       data=question[index], game_type="MC")
 
 
 def create_cw_game(user_id, course_title, module_title, concept_title):
@@ -169,7 +169,7 @@ def create_fitb_game(txt, user_id,
                        course_title=course_title,
                        module_title=module_title,
                        concept_title=concept_title,
-                       data=data, game_type="WS")
+                       data=data, game_type="FITB")
         i = i + 1
 
 
@@ -220,7 +220,9 @@ def create_dummy_user():
     concept_title = "concept_1"
 
     leaf_context = '''The koala or, inaccurately, koala bear[a] (Phascolarctos cinereus), is an arboreal herbivorous marsupial native to Australia. It is the only extant representative of the family Phascolarctidae and its closest living relatives are the wombats, which are members of the family Vombatidae. The koala is found in coastal areas of the mainland's eastern and southern regions, inhabiting Queensland, New South Wales, Victoria, and South Australia. It is easily recognisable by its stout, tailless body and large head with round, fluffy ears and large, spoon-shaped nose. The koala has a body length of 60–85 cm (24–33 in) and weighs 4–15 kg (9–33 lb). Fur colour ranges from silver grey to chocolate brown. Koalas from the northern populations are typically smaller and lighter in colour than their counterparts further south. These populations possibly are separate subspecies, but this is disputed.'''
-
+    payload = {
+        "input_text": "Amir Sarah Tendulkar is a former international cricketer from India and a former captain of the Indian national team. He is widely regarded as one of the greatest batsmen in the history of cricket. He is the highest run scorer of all time in International cricket."
+    }
 
     create_user(user_id)
     um.create_course(user_id, course_title=course_title)
@@ -229,15 +231,27 @@ def create_dummy_user():
                       course_title=course_title,
                       module_title=module_title,
                       concept_title=concept_title)
+    create_tf_game(txt=payload, user_id=user_id,
+                      course_title=course_title,
+                      module_title=module_title,
+                      concept_title=concept_title)
+    create_mc_game(txt=leaf_context, user_id=user_id,
+                      course_title=course_title,
+                      module_title=module_title,
+                      concept_title=concept_title)
     create_cw_game(user_id=user_id,
                       course_title=course_title,
                       module_title=module_title,
                       concept_title=concept_title)
-    create_dm_game(txt="unused",user_id=user_id,
+    create_ws_game(txt=("Gugu,Gaga"), user_id=user_id,
                    course_title=course_title,
                    module_title=module_title,
                    concept_title=concept_title)
-    create_fitb_game(txt="unused", user_id=user_id,
+    create_fitb_game(txt=leaf_context, user_id=user_id,
+                   course_title=course_title,
+                   module_title=module_title,
+                   concept_title=concept_title)
+    create_dm_game(txt="unused",user_id=user_id,
                    course_title=course_title,
                    module_title=module_title,
                    concept_title=concept_title)
