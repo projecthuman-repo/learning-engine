@@ -45,15 +45,15 @@ class UserManager:
         self.user_dict[user_id].courses[course_title].modules[module_title]. \
             concepts[concept_title].games["CW"][local_game_id] = game
 
-    def create_dm_game(self, user_id, course_title, module_title, concept_title, data):
+    def create_game(self, user_id, course_title, module_title, concept_title, data, game_type):
 
         # 1. initialize game id based on current counter
         local_game_id = self.user_dict[user_id].courses[course_title].modules[module_title]. \
-            concepts[concept_title].local_game_id_counter["DM"]
+            concepts[concept_title].local_game_id_counter[game_type]
         self.user_dict[user_id].courses[course_title].modules[module_title]. \
-            concepts[concept_title].local_game_id_counter["DM"] += 1
+            concepts[concept_title].local_game_id_counter[game_type] += 1
         # 2. create game
-        game = udc.DefinitionMatchGame(concept_title, local_game_id, data)
+        game = udc.Game(concept_title, local_game_id, data, game_type)
         # 3. append game
         self.user_dict[user_id].courses[course_title].modules[module_title]. \
-            concepts[concept_title].games["DM"][local_game_id] = game
+            concepts[concept_title].games[game_type][local_game_id] = game

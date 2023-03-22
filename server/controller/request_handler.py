@@ -14,7 +14,6 @@ from server.models.PDFExtract.pdf_extractor import Extractor
 from server.server_constants import *
 
 
-
 app = FastAPI()
 um = UserManager()
 extractor = Extractor()
@@ -136,11 +135,12 @@ def create_dm_game(txt, user_id,
     # 1. generate game data
     data = {"word":"def", "a":"the first letter in alphabet", "b":"the second letter in alphabet"}
     # definition match
-    um.create_dm_game(user_id,
+    um.create_game(user_id,
                    course_title="course_1",
                    module_title="module_1",
                    concept_title="concept_1",
-                   data = data),
+                   data = data,
+                   game_type = "DM"),
 
 def create_user(user_id):
     print("creating user")

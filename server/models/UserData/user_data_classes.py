@@ -2,12 +2,13 @@ from abc import ABC, abstractmethod
 import threading
 
 
-class Game(ABC):
-    def __init__(self, concept_tag: str, game_id):
+class Game():
+    def __init__(self, concept_tag: str, game_id, data, game_type):
         self.data = None
         self.concept_tag = concept_tag
-        self.game_type = None
+        self.game_type = game_type
         self.game_id = game_id
+        self.data = data
 
     def get_data(self):
         return self.data
