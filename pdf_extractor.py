@@ -1,5 +1,6 @@
-"""
 
+"""
+author: Jaylen Edwards
 Extracts the contents of a pdf using either optical character recognition (ocr) or a normal read.
 """
 
@@ -12,6 +13,35 @@ import re
 
 
 class Extractor:
+    """
+    This module provides a class Extractor for extracting the text contents from a PDF file. It uses either optical
+    character recognition (OCR) or a normal read.
+
+    Dependencies:
+    - pdf2image
+    - pypdf
+    - pytesseract
+    - constants (custom module)
+
+    Functions:
+    - init(self, document_path="", password=""): Constructor method. Initializes an instance of Extractor with optional
+    document_path and password parameters.
+    - ocr_read(self, path): Private method. Used on PDFs with no searchable text. Extracts text using OCR and saves as
+    images.
+    - plain_text_read(self): Private method. Extracts the text from a document with searchable text.
+    - change_document(self, document_path="", password=""): Public method. Changes which document to extract text from.
+    - to_txt(self): Public method. Creates a txt file of the extracted text.
+    - get_text(self): Public method. Returns the extracted text.
+    - filter(self): Private method. Used to remove unnecessary bits from academic papers.
+
+    Attributes:
+    - document_path: The file path to the PDF document.
+    - password: The password for the PDF document, if it is password-protected.
+    - text: The extracted text from the PDF document.
+    - document: The PDF document itself.
+    - reader: A PdfReader object for the PDF document.
+    - document_name: The name of the PDF document.
+    """
     def __init__(self, document_path="", password=""):
         # the below line of text is required as we need tesseract.exe installed to use the library.
         # change it to whatever local path you are using

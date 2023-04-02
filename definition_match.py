@@ -1,3 +1,4 @@
+
 """
 author: Jay Edwards
 
@@ -8,6 +9,22 @@ from PyDictionary import PyDictionary
 
 
 class DefinitionMatch:
+    """
+    A class for handling definition matching
+
+    Dependencies:
+    - PyDictionary
+
+    Attributes:
+    - words: a tuple of words to find definitions for
+    - pairings: a dictionary that stores the pairings of words and their corresponding definitions
+    - dictionary: a PyDictionary object that provides access to a library of dictionary terms
+
+    Methods:
+    - find_definitions(): searches for the definitions of the words in the 'words' attribute using the PyDictionary library. Returns a dictionary that contains word-definition pairs for only those words that have a definition in the library.
+    - modify_definition(word, new_definition): modifies the definition of an existing word-definition pair in the 'pairings' attribute.
+    - get_dictionary_entry(word): returns the dictionary entry (definition) for a given word from the 'pairings' attribute. Returns None if the word is not found in the 'pairings' attribute.
+    """
     def __init__(self, words=()):
         # the tuple of words should ideally come from a list of words
         self.words = words

@@ -1,5 +1,5 @@
 """
-author: The Jay Edwards
+author: Jay Edwards
 
 This class handles extracting keywords and paragraphs from a text.
 """
@@ -11,7 +11,39 @@ import spacy
 
 
 class TextManipulation:
+    """
+    This class provides methods for extracting information from a given text.
 
+    Dependencies:
+    - Counter
+    - openai
+    - spacy
+    - language_tool_python
+
+
+    Attributes:
+    -----------
+    - nlp: loads the english tokenizer for spacy so that it can parse the language
+    - tool: load the enlgish language tool for automatic correction
+
+    Methods:
+    --------
+    get_keywords(text: str, frequency: int = 1) -> List[str]:
+        Extracts the keywords from the given text using OpenAI GPT-3 or Spacy NLP and returns a list of keywords.
+
+    get_sentences(text: str) -> List[str]:
+        Extracts the sentences from the given text using Spacy NLP and returns a list of sentences.
+
+    get_paragraphs(text: str) -> List[str]:
+        Extracts the paragraphs from the given text using OpenAI GPT-3 or simple newline splitting and returns a list of paragraphs.
+
+    check_text(text: str) -> str:
+        Corrects the grammar and spelling errors in the given text using LanguageTool and returns the corrected text.
+
+    gpt_query(query: str) -> Union[None, OpenAICompletion]:
+        Sends the given query to OpenAI GPT-3 and returns the response.
+
+    """
     # Download and load the spacy tokenizer for english
     def __init__(self):
         # Download English tokenizer
@@ -21,7 +53,7 @@ class TextManipulation:
         # use a local server (automatically set up), language English
         self.tool = ltp.LanguageTool('en-US')
         # Get open AI key for chat gpt
-        openai.api_key = "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"
+        openai.api_key = "OPENAI_KEY"
 
     # Return a list of keywords found in the text
     def get_keywords(self, text="", frequency=1):
