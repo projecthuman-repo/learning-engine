@@ -4,9 +4,9 @@ import toolz
 
 from server.models.LeafAI.modules.duplicate_removal import remove_distractors_duplicate_with_correct_answer, remove_duplicates
 from server.models.LeafAI.modules.text_cleaning import clean_text
-from server.controller.ml_models.distractor_generation.distractor_generator import DistractorGenerator
-from server.controller.ml_models.question_generation.question_generator import QuestionGenerator
-from server.controller.ml_models import Sense2VecDistractorGeneration
+from ml_models.distractor_generation.distractor_generator import DistractorGenerator
+from ml_models.question_generation.question_generator import QuestionGenerator
+from ml_models.sense2vec_distractor_generation .sense2vec_generation import Sense2VecDistractorGeneration
 from server.models.LeafAI.models.question import Question
 
 import time

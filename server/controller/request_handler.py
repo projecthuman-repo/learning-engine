@@ -11,9 +11,11 @@ sys.path.append(a)
 
 import threading
 
+import json
 import uvicorn
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from fastapi import FastAPI
+import jsonpickle
 from markupsafe import escape
 from server.models.Crossword import crossword_parser
 from server.models.Crossword import crossword_2 as crossword_methods
@@ -28,7 +30,7 @@ from server.server_constants import *
 
 
 
-app = FastAPI()
+app = Flask(__name__)
 um = UserManager()
 extractor = Extractor()
 tf_gen = main.BoolQGen()
@@ -41,33 +43,50 @@ def init_BoolQGen(self, payload):
     self.data = qe.predict_boolq(payload)
     self.data["answer"] = 2  # 0 = False 1 = True, 2/other num = uninitialized
 # Base route returning an object of hello world
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+@app.route("/")
+def hello_world():
+    return "<p>Hello, World!</p>"
 
 
-@app.get("/crossword_grid")
+@app.route('/crossword_grid', methods=['GET'])
 def print_crossword_grid():
-    a = crossword_methods.run(print_cross=False)
-    return {a}
+    if request.method == 'POST':
+        a = crossword_methods.run(print_cross=False)
+        return {a}
 
 fake_items_db = [{"item_name": "Foo"}, {"item_name": "Bar"}, {"item_name": "Baz"}]
 
+@app.route('/items/', methods=['POST'])
+def read_item():  # http://127.0.0.1:8000/items/?skip=0&limit=10
+    error = None
+    if request.method == 'POST':
+        skip = request.form['skip']
+        limit = request.form['limit']
+        return fake_items_db[skip: skip + limit]
+    else:
+        error = 'Invalid parameters'
+        return error
 
-@app.get("/items/")
-async def read_item(skip: int = 0, limit: int = 10):  # http://127.0.0.1:8000/items/?skip=0&limit=10
-    return fake_items_db[skip: skip + limit]
 
-@app.post("/user/")  # http://127.0.0.1:8000/user/?user_id=0
-async def initiate_user(user_id: str):
-
-    create_user(user_id)
-    um.create_course(user_id,course_title="course_1")
-    um.create_module(user_id,course_title="course_1",module_title="module_1")
-    um.create_concept(user_id,
-                      course_title="course_1",
-                      module_title="module_1",
-                      concept_title="concept_1")
+ # http://127.0.0.1:8000/user/?user_id=0
+@app.route('/user/', methods=['GET', 'POST'])
+def initiate_user():
+    #user_id = request.form['user_id']
+    user_id = request.args.get('user_id', None)
+    if request.method == 'POST':
+        create_user(user_id)
+        um.create_course(user_id,course_title="course_1")
+        um.create_module(user_id,course_title="course_1",module_title="module_1")
+        um.create_concept(user_id,
+                          course_title="course_1",
+                          module_title="module_1",
+                          concept_title="concept_1")
+        return "user" + str(user_id) + "created" + "txt"
+    elif request.method == 'GET':
+        if user_id == "dummy":  # some inappropriate usage just for simpler testing
+            create_dummy_user()
+        return jsonpickle.encode(um.user_dict[user_id],unpicklable=False,indent=4)
+        # unpickable avoids producing "py/obj" values; indent allows pretty printed view
 
     # print("reading_pdf")
     # txt = read_pdf(pdf_extractor_constants.TEMP_PDF_PATH)
@@ -82,7 +101,6 @@ async def initiate_user(user_id: str):
     #                   concept_title="concept_1")
     # print("tfq_created")
 
-    return "user" + str(user_id) + "created" + "txt"
 
 
 
@@ -117,6 +135,7 @@ def create_mc_game(txt, user_id,
                        data=question[index], game_type="MC")
 
 
+
 def create_cw_game(user_id, course_title, module_title, concept_title):
     data = crossword_methods.run(print_cross=True,
                           crossword_txt_path=CROSSWORD_TXT_PATH)
@@ -127,9 +146,12 @@ def create_cw_game(user_id, course_title, module_title, concept_title):
                       data=data, game_type="CW")
 
 
-@app.post("/user/initiate_cw_game")  # http://127.0.0.1:8000/user/initiate_cw_game/?user_id=0&cw=1
-async def initiate_cw_game(user_id: str, cw: str):
-    if cw == "1":
+ # http://127.0.0.1:8000/user/initiate_cw_game/?user_id=0&cw=1
+@app.route('/user/initiate_cw_game', methods=['POST'])
+def initiate_cw_game():
+    #user_id = request.form['user_id']
+    user_id = request.args.get('user_id', None)
+    if request.method == 'POST':
         print("creating_cw_game")
         create_cw_game(user_id,
                       course_title="course_1",
@@ -207,19 +229,21 @@ def read_pdf(path:str):
     txt = txt[0:250]
     payload = {"input_text": txt}
     return payload
-@app.post("/user/")  # http://127.0.0.1:8000/user/?user_id=0
-async def convert_pdf(user_id: str, convert_pdf: bool = True):
-    extractor.ocr_read(TEMP_PDF_PATH)
-    txt = extractor.get_text()
-    txt = txt[0:250]
-    payload = {"input_text": txt}
+ # http://127.0.0.1:8000/user/?user_id=0
+@app.route('/pdf/', methods=['POST'])
+def convert_pdf():
+    #user_id = request.form['user_id']
+    user_id = request.args.get('user_id', None)
+    payload = None
+    if request.method == 'POST':
+        extractor.ocr_read(request.files['pdf_file_name'])
+        txt = extractor.get_text()
+        txt = txt[0:250]
+        payload = {"input_text": txt}
     return payload
 
-@app.get("/user/")  # http://127.0.0.1:8000/user/?user_id=0&create=False
-async def get_user(user_id: str):
-    if user_id == "dummy": # some inappropriate usage just for simpler testing
-        create_dummy_user()
-    return um.user_dict[user_id]
+
+
 
 
 
@@ -266,9 +290,14 @@ def create_dummy_user():
                    module_title=module_title,
                    concept_title=concept_title)
 # uvicorn server.controller.request_handler:app --reload
+
+# flask --app YOUR_PREV_PATH'S\server\controller\request_handler.py run
 if __name__ == '__main__':
     print('[main]: starting...')
 
     uvicorn.run("server.controller.request_handler:app", host="127.0.0.1", port=8000, reload=False)
     # reload=True means if you edit request_handler.py while the server is running, it will auto-rerun the server
-    create_dummy_user()
+    #create_dummy_user()
+
+
+
