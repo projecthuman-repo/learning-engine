@@ -8,7 +8,7 @@ import pytesseract as tess
 import os
 import re
 import concurrent.futures
-from server.server_constants import TESSERACT_EXE_PATH, TESSERACT_DATA_PATH, POPPLER_PATH, TEMP_PDF_PATH
+from srv.server_constants import TESSERACT_EXE_PATH, TESSERACT_DATA_PATH, POPPLER_PATH, TEMP_PDF_PATH
 class Extractor:
     def __init__(self, document_path=""):
         # the below line of text is required as we need tesseract.exe installed to use the library.

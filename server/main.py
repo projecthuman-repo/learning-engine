@@ -11,26 +11,30 @@ sys.path.append(a)
 
 import threading
 
-import json
-import uvicorn
-from flask import Flask, request, jsonify
-from fastapi import FastAPI
+# import json
+# import uvicorn
+from flask import Flask, request, jsonify,Blueprint,render_template,redirect
+# from flask_restx import Resource, Api, fields
+#from flask_restx.api import swagger
+from flasgger import Swagger,swag_from
+# from fastapi import FastAPI
 import jsonpickle
-from markupsafe import escape
-from server.models.Crossword import crossword_parser
-from server.models.Crossword import crossword_2 as crossword_methods
-from pprint import pprint
-from server.controller.user_manager import UserManager
-from server.models.Questgen import main
-from server.models.LeafAI.mcq_generation import MCQGenerator
-from server.models.WordSearch.WordSearch import WordSearch
-import server.models.UserData.user_data_classes as udc
-from server.models.PDFExtract.pdf_extractor import Extractor
-from server.server_constants import *
+# from markupsafe import escape
+# from server.models.Crossword import crossword_parser
+from srv.models.Crossword import crossword_2 as crossword_methods
+# from pprint import pprint
+from srv.controller.user_manager import UserManager
+from srv.models.Questgen import main
+from srv.models.LeafAI.mcq_generation import MCQGenerator
+from srv.models.WordSearch.WordSearch import WordSearch
+import srv.models.UserData.user_data_classes as udc
+from srv.models.PDFExtract.pdf_extractor import Extractor
+from srv.server_constants import *
 
 
 
 app = Flask(__name__)
+Swagger(app)
 um = UserManager()
 extractor = Extractor()
 tf_gen = main.BoolQGen()
@@ -44,8 +48,8 @@ def init_BoolQGen(self, payload):
     self.data["answer"] = 2  # 0 = False 1 = True, 2/other num = uninitialized
 # Base route returning an object of hello world
 @app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
+def hello_world() -> str:
+    return "Hello, World!"
 
 
 @app.route('/crossword_grid', methods=['GET'])
@@ -291,12 +295,13 @@ def create_dummy_user():
                    concept_title=concept_title)
 # uvicorn server.controller.request_handler:app --reload
 
-# flask --app YOUR_PREV_PATH'S\server\controller\request_handler.py run
+# flask --app YOUR_PREV_PATH'S\server\controller\main.py run
 if __name__ == '__main__':
     print('[main]: starting...')
 
-    uvicorn.run("server.controller.request_handler:app", host="127.0.0.1", port=8000, reload=False)
-    # reload=True means if you edit request_handler.py while the server is running, it will auto-rerun the server
+    app.run(host='127.0.0.1', port=8080, debug=False)
+    # uvicorn.run("server.controller.request_handler:app", host="127.0.0.1", port=8000, reload=False)
+    # reload=True means if you edit main.py while the server is running, it will auto-rerun the server
     #create_dummy_user()
 
 

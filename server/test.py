@@ -1,6 +1,6 @@
 from pprint import pprint
 import nltk
-from server.models.Questgen import main
+from srv.models.Questgen import main
 from nltk.corpus import stopwords
 
 if __name__ == "__main__":

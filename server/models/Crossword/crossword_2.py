@@ -30,8 +30,8 @@ from PIL import ImageDraw
 from PIL import ImageFont
 from optparse import OptionParser, OptionGroup
 import logging
-import server.models.Crossword.crossword_parser as crossword_parser
-from server.server_constants import CROSSWORD_TXT_PATH
+import srv.models.Crossword.crossword_parser as crossword_parser
+from srv.server_constants import CROSSWORD_TXT_PATH
 
 
 ## Thanks Bryan Helmig for his inspiration for this script. He did a lot
