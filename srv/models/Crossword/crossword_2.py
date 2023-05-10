@@ -1228,4 +1228,4 @@ def run( print_cross, crossword_txt_path):
 if __name__ == "__main__":
     data = run(print_cross=True,crossword_txt_path=CROSSWORD_TXT_PATH)
 
-# python D:\pycharm_projecs\learning-engine\server\models\crossword_2.py cwf-spec.txt -p 32 -o OUTPUT.png --print-crossword --create-image
+# python D:\pycharm_projecs\learning-engine\srv\models\crossword_2.py cwf-spec.txt -p 32 -o OUTPUT.png --print-crossword --create-image

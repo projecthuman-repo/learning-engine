@@ -20,7 +20,7 @@ from flasgger import Swagger,swag_from
 # from fastapi import FastAPI
 import jsonpickle
 # from markupsafe import escape
-# from server.models.Crossword import crossword_parser
+# from srv.models.Crossword import crossword_parser
 from srv.models.Crossword import crossword_2 as crossword_methods
 # from pprint import pprint
 from srv.controller.user_manager import UserManager
@@ -47,7 +47,7 @@ def init_BoolQGen(self, payload):
     self.data = qe.predict_boolq(payload)
     self.data["answer"] = 2  # 0 = False 1 = True, 2/other num = uninitialized
 # Base route returning an object of hello world
-@app.route("/")
+@app.route('/')
 def hello_world() -> str:
     return "Hello, World!"
 
@@ -293,15 +293,15 @@ def create_dummy_user():
                    course_title=course_title,
                    module_title=module_title,
                    concept_title=concept_title)
-# uvicorn server.controller.request_handler:app --reload
+# uvicorn srv.controller.request_handler:app --reload
 
-# flask --app YOUR_PREV_PATH'S\server\controller\main.py run
+# flask --app YOUR_PREV_PATH'S\srv\controller\main.py run
 if __name__ == '__main__':
     print('[main]: starting...')
 
     app.run(host='127.0.0.1', port=8080, debug=False)
-    # uvicorn.run("server.controller.request_handler:app", host="127.0.0.1", port=8000, reload=False)
-    # reload=True means if you edit main.py while the server is running, it will auto-rerun the server
+    # uvicorn.run("srv.controller.request_handler:app", host="127.0.0.1", port=8000, reload=False)
+    # reload=True means if you edit main.py while the srv is running, it will auto-rerun the srv
     #create_dummy_user()
 
 
