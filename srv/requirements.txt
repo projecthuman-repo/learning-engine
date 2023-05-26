@@ -1,0 +1,27 @@
+gunicorn==20.1.0
+flasgger==0.9.5
+flashtext==2.7
+Flask==2.2.2
+flask_restx==1.1.0
+jsonpickle==3.0.1
+MarkupSafe==2.1.1
+nltk==3.8.1
+numpy==1.24.2
+pandas==1.5.2
+pdf2image==1.16.2
+Pillow==9.5.0
+pke_tool==1.8.1
+pypdf==3.8.1
+pytesseract==0.3.10
+pytorch_lightning==1.9.4
+Requests==2.30.0
+scikit-learn==1.0.1
+sense2vec==2.0.1
+spacy==3.5.0
+strsimpy==0.2.1
+toolz==0.12.0
+-f https://download.pytorch.org/whl/torch_stable.html
+torch==1.13.1+cpu
+tqdm==4.62.3
+transformers==4.25.1
+uvicorn==0.22.0
