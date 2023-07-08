@@ -1,5 +1,5 @@
 
-import srv.models.UserData.user_data_classes as udc
+import models.UserData.user_data_classes as udc
 class UserManager:
     def __init__(self):
         # load user placeholder

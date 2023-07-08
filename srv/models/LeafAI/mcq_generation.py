@@ -2,12 +2,12 @@ from typing import List
 from nltk.tokenize import sent_tokenize
 import toolz
 
-from srv.models.LeafAI.modules.duplicate_removal import remove_distractors_duplicate_with_correct_answer, remove_duplicates
-from srv.models.LeafAI.modules.text_cleaning import clean_text
-from srv.ml_models.distractor_generation.distractor_generator import DistractorGenerator
-from srv.ml_models.question_generation.question_generator import QuestionGenerator
-from srv.ml_models.sense2vec_distractor_generation.sense2vec_generation import Sense2VecDistractorGeneration
-from srv.models.LeafAI.models.question import Question
+from models.LeafAI.modules.duplicate_removal import remove_distractors_duplicate_with_correct_answer, remove_duplicates
+from models.LeafAI.modules.text_cleaning import clean_text
+from ml_models.distractor_generation.distractor_generator import DistractorGenerator
+from ml_models.question_generation.question_generator import QuestionGenerator
+from ml_models.sense2vec_distractor_generation.sense2vec_generation import Sense2VecDistractorGeneration
+from models.LeafAI.models.question import Question
 
 import time
 
