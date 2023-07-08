@@ -19,16 +19,16 @@ from flasgger import Swagger,swag_from
 # from fastapi import FastAPI
 import jsonpickle
 # from markupsafe import escape
-# from srv.models.Crossword import crossword_parser
-from srv.models.Crossword import crossword_2 as crossword_methods
+# from models.Crossword import crossword_parser
+from models.Crossword import crossword_2 as crossword_methods
 # from pprint import pprint
-from srv.controller.user_manager import UserManager
-from srv.models.Questgen import main
-from srv.models.LeafAI.mcq_generation import MCQGenerator
-from srv.models.WordSearch.WordSearch import WordSearch
-import srv.models.UserData.user_data_classes as udc
-from srv.models.PDFExtract.pdf_extractor import Extractor
-from srv.server_constants import *
+from controller.user_manager import UserManager
+from models.Questgen import main
+from models.LeafAI.mcq_generation import MCQGenerator
+from models.WordSearch.WordSearch import WordSearch
+import models.UserData.user_data_classes as udc
+from models.PDFExtract.pdf_extractor import Extractor
+from server_constants import *
 
 
 
@@ -292,14 +292,15 @@ def create_dummy_user():
                    course_title=course_title,
                    module_title=module_title,
                    concept_title=concept_title)
-# uvicorn srv.controller.request_handler:app --reload
+# uvicorn controller.request_handler:app --reload
 
 # flask --app YOUR_PREV_PATH'S\srv\controller\main.py run
+
 if __name__ == '__main__':
     print('[main]: starting...')
 
     app.run(host='127.0.0.1', port=8080, debug=False)
-    # uvicorn.run("srv.controller.request_handler:app", host="127.0.0.1", port=8000, reload=False)
+    # uvicorn.run("controller.request_handler:app", host="127.0.0.1", port=8000, reload=False)
     # reload=True means if you edit main.py while the srv is running, it will auto-rerun the srv
     #create_dummy_user()
 
