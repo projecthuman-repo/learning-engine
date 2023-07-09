@@ -1,1 +1,2 @@
 srv/ml_models/*
+srv/server_constants.py

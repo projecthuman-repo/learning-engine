@@ -30,7 +30,7 @@ and all the packages/libs that the current files depend on.
 LeafAI and Questgen models requires the "reddit tar.gz" file and other model related files which were too big and those needed to be placed in .gitignore.
 
 2. server_constants: 
-Due to our lack of experience, its currently a mess to align all the PATH variables in a general fashion, try to adjust on your own and place the server_constants.py file in .gitignore as well.
+Due to our lack of experience, its currently a mess to align all the paths variables in a general fashion, try to adjust on your own and place the server_constants.py file in .gitignore as well.
 
 3. RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cpu! (when checking argument for argument index in method wrapper_CUDA__index_select): 
 Go to the distractor_generator.py or question_generator.py, theres a _model_predict function, add _.to('cuda')_ to source_encoding = self.tokenizer(blablabla) and make it source_encoding = self.tokenizer(blablabla).to('cuda')
