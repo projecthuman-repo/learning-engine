@@ -1,0 +1,10 @@
+Flask==3.0.0
+filetype==1.2.0
+PyMuPDF==1.23.4
+python-docx==0.8.11
+pytest==7.4.2
+flasgger==0.9.7.1
+mongoengine==0.27.0
+certifi==2022.12.7
+google-cloud-aiplatform==1.36.1
+pytest==7.4.2

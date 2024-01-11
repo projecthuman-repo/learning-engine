@@ -1,0 +1,228 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "Sample API",
+      "description": "A sample API that demonstrates how to use Flask-SwaggerUI.",
+      "version": "1.0"
+    },
+    "basePath": "",
+    "schemes": [
+      "http"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "paths": {
+      "/material/get": {
+        "get": {
+          "summary": "Get Resource",
+          "description": "Retrieve materials for a specific course.",
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "query",
+              "name": "courseId",
+              "schema": {
+                "type": "string"
+              },
+              "required": true,
+              "description": "Description of the parameter"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "key": "value"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request"
+            },
+            "404": {
+              "description": "Resource not found"
+            }
+          }
+        }
+      },
+      "/material/create": {
+        "post": {
+          "summary": "Create materials for a course given some content",
+          "consumes": [
+             "application/json"
+          ],
+            "parameters": [
+                {
+                    "in": "body",
+                    "name": "Course_Info",
+                    "schema": {
+                        "$ref": "#/defintions/User"
+                    }
+                }   
+                ],    
+        "responses": {
+            "200": {
+              "description": "Data posted successfully",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "message": "Data posted successfully"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request: Invalid input data",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "error": "Bad Request: Invalid input data"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/game/get": {
+        "get": {
+          "summary": "Get Resource",
+          "description": "Retrieve a game for a specific material.",
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "query",
+              "name": "courseId",
+              "schema": {
+                "type": "string"
+              },
+            
+              "required": true,
+              "description": "Description of the parameter"
+            },
+            {
+                "in": "query",
+                "name": "gameType",
+                "schema": {
+                  "type": "string"
+                },
+              
+                "required": true,
+                "description": "Description of the parameter"
+            },
+            {
+                "in": "query",
+                "name": "materialId",
+                "schema": {
+                  "type": "string"
+                },
+              
+                "required": true,
+                "description": "Description of the parameter"
+              }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "key": "value"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request"
+            },
+            "404": {
+              "description": "Resource not found"
+            }
+          }
+        }
+      },
+      "/game/create": {
+        "post": {
+          "summary": "Create games for specific content",
+          "consumes": [
+            "application/json"
+          ],
+            "parameters": [
+                {
+                "in": "body",
+                    "name": "Game_Info",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/defintions/Game"
+                    }
+                }     
+                ],    
+        "responses": {
+            "200": {
+              "description": "Data posted successfully",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "message": "Data posted successfully"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request: Invalid input data",
+              "content": {
+                "application/json": {
+                  "example": {
+                    "error": "Bad Request: Invalid input data"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "defintions": {
+        "User": {
+            "type": "object",
+            "required": [
+                "courseId",
+                "courseMaterial",
+                "courseDifficulty",
+                "materialType",
+                "accessType"
+            ],
+            "properties": {
+                "courseId": {"type": "string"},
+                "courseMaterial": {"type": "string"},
+                "courseDifficulty": {"type": "string"},
+                "materialType": {"type": "string"},
+                "accessType": {"type": "string"}
+            }
+        },
+        "Game": {
+            "type": "object",
+            "required": [
+                "courseId",
+                "gameType",
+                "gameContent",
+                "materialId"
+            ],
+            "properties": {
+                "courseId": {"type": "string"},
+                "gameType": {"type": "string"},
+                "gameContent": {"type": "string"},
+                "materialId": {"type": "string"}
+            }
+        }
+
+    }     
+}
