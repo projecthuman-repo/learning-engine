@@ -1,8 +1,8 @@
 # Flask Blueprint for LLM routes.
 import json
 from flask import Blueprint, request, jsonify
-from ..models.llm import getModel
-from ..database import mongo
+from api.models.llm import getModel
+from api.database import mongo
 from .auth.wrapper import require_token
 
 llm_bp = Blueprint('llm', __name__)

@@ -1,7 +1,7 @@
 from flask import Flask
 from flasgger import Swagger
 
-from .blueprints.api import api
+from blueprints.api import api
 
 
 SWAGGER_TEMPLATE = {
